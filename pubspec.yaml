@@ -59,7 +59,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/marhbabik_new_icon.png
+    - assets/images/marhbabik_full_logo_trimmed.png
     - assets/images/picture.jpg
+    - assets/images/empty.png
     - assets/images/placeholder.png
     - assets/images/homepage_for_now.jpg
     - assets/images/explore_top.jpg

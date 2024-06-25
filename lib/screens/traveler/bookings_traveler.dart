@@ -590,9 +590,11 @@ class _TravelerBookingsScreenState extends State<TravelerBookingsScreen> {
   }
 
   Widget _buildNoBookingsWidget() {
-    return const InfoMessageWidget(
+    return 
+    const InfoMessageWidget(
         iconData: Icons.hourglass_empty,
         message: "Pas encore de demandes de réservation.");
+      
   }
 
   Widget _buildLoadingSkeleton() {

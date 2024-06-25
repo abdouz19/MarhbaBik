@@ -46,7 +46,7 @@ class _DestinationItemState extends State<SecondDestinationItem> {
     double imageWidth = widget.imageWidth ?? 250;
     List<String> images = widget.destination.otherPicturesUrls;
     String title = "${widget.destination.name}, ${widget.destination.wilaya}";
-    int maxLength = 33;
+    int maxLength = imageWidth > 200 ? 33 : 24;
 
     String displayedTitle = title.length > maxLength
         ? "${title.substring(0, maxLength - 3)}..."

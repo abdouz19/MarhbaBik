@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:marhba_bik/api/firestore_service.dart';
 import 'package:marhba_bik/components/outlined_material_button.dart';
 import 'package:marhba_bik/screens/car_owner/car_owner_edit_info.dart';
 import 'package:marhba_bik/screens/car_owner/cars_requests.dart';
@@ -19,11 +20,22 @@ class _CarOwnerProfileState extends State<CarOwnerProfile> {
   String _firstName = '';
   String _profilePicture = '';
   String _userID = '';
-
+  String id = FirebaseAuth.instance.currentUser!.uid;
+  int bookingsCount = 0;
   @override
   void initState() {
     super.initState();
     fetchUserData();
+  }
+
+  Future<void> showBookings() async {
+    FirestoreService firestoreService = FirestoreService();
+
+    int count = await firestoreService.countBookingsById(id);
+
+    setState(() {
+      bookingsCount = count;
+    });
   }
 
   Future<void> fetchUserData() async {
@@ -137,7 +149,8 @@ class _CarOwnerProfileState extends State<CarOwnerProfile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "42",
+                            "$bookingsCount",
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               color: const Color(0xff001939),
                               fontSize: 18,
@@ -145,7 +158,8 @@ class _CarOwnerProfileState extends State<CarOwnerProfile> {
                             ),
                           ),
                           Text(
-                            "Bookings",
+                            "Réservations",
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               color: const Color(0xff001939),
                               fontSize: 16,
@@ -160,6 +174,7 @@ class _CarOwnerProfileState extends State<CarOwnerProfile> {
                           ),
                           Text(
                             "4.2/5 rating",
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               color: const Color(0xff001939),
                               fontSize: 18,
@@ -168,6 +183,7 @@ class _CarOwnerProfileState extends State<CarOwnerProfile> {
                           ),
                           Text(
                             "Reviews",
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               color: const Color(0xff001939),
                               fontSize: 16,

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:marhba_bik/api/firestore_service.dart';
 import 'package:marhba_bik/components/outlined_material_button.dart';
 import 'package:marhba_bik/screens/traveler/bookings_traveler.dart';
 import 'package:marhba_bik/screens/traveler/edit_info_traveler.dart';
@@ -18,16 +19,27 @@ class ProfileTraveler extends StatefulWidget {
 class _ProfileTravelerState extends State<ProfileTraveler> {
   String _firstName = '';
   String _profilePicture = '';
-
+  String userId = FirebaseAuth.instance.currentUser!.uid;
+  int bookingsCount = 0;
   @override
   void initState() {
     super.initState();
     fetchUserData();
+    showBookings();
+  }
+
+  Future<void> showBookings() async {
+    FirestoreService firestoreService = FirestoreService();
+
+    int count = await firestoreService.countBookingsById(userId);
+
+    setState(() {
+      bookingsCount = count;
+    });
   }
 
   Future<void> fetchUserData() async {
     try {
-      String userId = FirebaseAuth.instance.currentUser!.uid;
       DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(userId)
@@ -135,7 +147,8 @@ class _ProfileTravelerState extends State<ProfileTraveler> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "42",
+                            '$bookingsCount',
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               fontSize: 18,
                               color: const Color(0xff001939),
@@ -143,7 +156,8 @@ class _ProfileTravelerState extends State<ProfileTraveler> {
                             ),
                           ),
                           Text(
-                            "Bookings",
+                            "Réservations",
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               fontSize: 16,
                               color: const Color(0xff001939),
@@ -158,6 +172,7 @@ class _ProfileTravelerState extends State<ProfileTraveler> {
                           ),
                           Text(
                             "4.2/5 rating",
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               fontSize: 18,
                               color: const Color(0xff001939),
@@ -166,6 +181,7 @@ class _ProfileTravelerState extends State<ProfileTraveler> {
                           ),
                           Text(
                             "Reviews",
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               fontSize: 16,
                               color: const Color(0xff001939),

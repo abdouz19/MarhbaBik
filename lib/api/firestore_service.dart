@@ -772,4 +772,31 @@ class FirestoreService {
       return false;
     }
   }
+
+  Future<int> countBookingsById(String id) async {
+    int count = 0;
+
+    try {
+      // Query for bookings where the ID is found in targetID and bookingStatus is "accepted"
+      QuerySnapshot targetQuery = await FirebaseFirestore.instance
+          .collection('bookings')
+          .where('targetID', isEqualTo: id)
+          .where('bookingStatus', isEqualTo: 'accepted')
+          .get();
+
+      // Query for bookings where the ID is found in travelerID and bookingStatus is "accepted"
+      QuerySnapshot travelerQuery = await FirebaseFirestore.instance
+          .collection('bookings')
+          .where('travelerID', isEqualTo: id)
+          .where('bookingStatus', isEqualTo: 'accepted')
+          .get();
+
+      // Sum the counts from both queries
+      count = targetQuery.docs.length + travelerQuery.docs.length;
+    } catch (e) {
+      print('Error counting bookings: $e');
+    }
+
+    return count;
+  }
 }

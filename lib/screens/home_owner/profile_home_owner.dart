@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:marhba_bik/api/firestore_service.dart';
 import 'package:marhba_bik/components/outlined_material_button.dart';
 import 'package:marhba_bik/screens/home_owner/home_owner_edit_info.dart';
 import 'package:marhba_bik/screens/home_owner/homes_requests.dart';
@@ -18,11 +19,23 @@ class HomeOwnerProfile extends StatefulWidget {
 class _HomeOwnerProfileState extends State<HomeOwnerProfile> {
   String _firstName = '';
   String _profilePicture = '';
-
+  String userId = FirebaseAuth.instance.currentUser!.uid;
+  int bookingsCount = 0;
   @override
   void initState() {
     super.initState();
     fetchUserData();
+    showBookings();
+  }
+
+  Future<void> showBookings() async {
+    FirestoreService firestoreService = FirestoreService();
+
+    int count = await firestoreService.countBookingsById(userId);
+
+    setState(() {
+      bookingsCount = count;
+    });
   }
 
   Future<void> fetchUserData() async {
@@ -135,7 +148,8 @@ class _HomeOwnerProfileState extends State<HomeOwnerProfile> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "42",
+                            "$bookingsCount",
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               color: const Color(0xff001939),
                               fontSize: 18,
@@ -143,7 +157,8 @@ class _HomeOwnerProfileState extends State<HomeOwnerProfile> {
                             ),
                           ),
                           Text(
-                            "Bookings",
+                            overflow: TextOverflow.ellipsis,
+                            "Réservations",
                             style: GoogleFonts.poppins(
                               fontSize: 16,
                               color: const Color(0xff001939),
@@ -158,6 +173,7 @@ class _HomeOwnerProfileState extends State<HomeOwnerProfile> {
                           ),
                           Text(
                             "4.2/5 rating",
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               fontSize: 18,
                               color: const Color(0xff001939),
@@ -166,6 +182,7 @@ class _HomeOwnerProfileState extends State<HomeOwnerProfile> {
                           ),
                           Text(
                             "Reviews",
+                            overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               fontSize: 16,
                               color: const Color(0xff001939),

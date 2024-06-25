@@ -100,13 +100,11 @@ class _CarOwnerOffersState extends State<CarOwnerOffers> {
                     message:
                         "Une erreur s'est produite lors de la récupération de vos offres.");
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return InkWell(
-                  onTap: showScreen,
-                  child: const InfoMessageWidget(
+                return  InfoMessageWidget(
                       iconData: Icons.hourglass_empty,
+                      onTap: showScreen,
                       message:
-                          "Vous n'avez pas encore publié d'offres. Cliquez ici pour ajouter vos offres."),
-                );
+                          "Vous n'avez pas encore publié d'offres. Cliquez ici pour ajouter vos offres.");
               } else {
                 List<Map<String, dynamic>> cars = snapshot.data!;
                 return ListView.builder(

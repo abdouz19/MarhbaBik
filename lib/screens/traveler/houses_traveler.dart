@@ -5,6 +5,7 @@ import 'package:marhba_bik/screens/traveler/recommanded_screen.dart';
 import 'package:marhba_bik/screens/traveler/regions_screen.dart';
 import 'package:marhba_bik/screens/traveler/wilaya_screen.dart';
 import 'package:marhba_bik/widgets/lists/cars_listview.dart';
+import 'package:marhba_bik/widgets/lists/destination_listview.dart';
 import 'package:marhba_bik/widgets/lists/houses_listview.dart';
 import 'package:marhba_bik/widgets/lists/trips_listview.dart';
 import 'package:marhba_bik/widgets/lists/wilaya_listview.dart';
@@ -237,6 +238,70 @@ class _HousesTravelerScreenState extends State<HousesTraveler> {
                         ]),
                   ),
                 ],
+              ),
+              const SizedBox(height: 40),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/marhbabik_full_logo_trimmed.png',
+                      width: 150,
+                      height: 60,
+                      alignment: Alignment.topLeft,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    const Text(
+                      'Vous propose',
+                      style: TextStyle(
+                        color: Color(0xff001939),
+                        fontWeight: FontWeight.w700,
+                        fontFamily: 'KastelovAxiforma',
+                        fontSize: 16,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  'Des endroits à visiter',
+                  style: TextStyle(
+                    color: Color(0xff001939),
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'KastelovAxiforma',
+                    fontSize: 20,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  'Découvrez les trésors cachés de l\'Algérie et explorez les meilleurs endroits à visiter',
+                  style: TextStyle(
+                    color: Color(0xff001939),
+                    fontWeight: FontWeight.w300,
+                    fontFamily: 'KastelovAxiforma',
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Container(
+                padding: const EdgeInsets.only(left: 15),
+                height: 220,
+                child: DestinationsList(
+                  future: FirestoreService().fetchDestinations(),
+                  type: '',
+                  height: 160,
+                  width: 200,
+                ),
               ),
               const SizedBox(height: 40),
               const Padding(

@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 class InfoMessageWidget extends StatelessWidget {
   final IconData iconData;
   final String message;
-
+  final void Function()? onTap;
   const InfoMessageWidget({
-    Key? key,
+    super.key,
     required this.iconData,
     required this.message,
-  }) : super(key: key);
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -16,21 +17,23 @@ class InfoMessageWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            iconData,
-            size: 100,
-            color: Colors.grey[400],
+          Image.asset(
+            'assets/images/empty.png',
           ),
           const SizedBox(height: 20),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              message,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey[600],
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: InkWell(
+              onTap: onTap,
+              child: Text(
+                message,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 19,
+                  color: Color(0xff001939),
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'KastelovAxiforma',
+                ),
               ),
             ),
           ),
