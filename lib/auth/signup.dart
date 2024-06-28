@@ -85,12 +85,11 @@ class _SignupScreen extends State<SignupScreen> {
                     Text(
                       'Rejoignez MarhbaBik',
                       textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                        textStyle: const TextStyle(
-                          color: Color(0xff001939),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 26,
-                        ),
+                      style: TextStyle(
+                        color: Color(0xff001939),
+                        fontFamily: 'KastelovAxiforma',
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 40),
@@ -132,8 +131,8 @@ class _SignupScreen extends State<SignupScreen> {
                                     (UserTypes userType) {
                               return DropdownMenuItem<UserTypes>(
                                 value: userType,
-                                child:
-                                    Text('I am a ${formatUserType(userType)}'),
+                                child: Text(
+                                    'Je suis un ${formatUserType(userType)}'),
                               );
                             }).toList(),
                             decoration: InputDecoration(

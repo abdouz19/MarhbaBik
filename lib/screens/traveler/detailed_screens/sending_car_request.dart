@@ -71,9 +71,9 @@ class _SendingCarRequestScreenState extends State<SendingCarRequestScreen> {
       isLoading = true;
     });
 
-    int pricePerDay = int.parse(widget.car.price);
+    double pricePerDay = double.parse(widget.car.price);
     int days = getDays();
-    int totalPrice = pricePerDay * days;
+    double totalPrice = pricePerDay * days;
 
     try {
       final commissionData = await apiService.calculateCommission(totalPrice);

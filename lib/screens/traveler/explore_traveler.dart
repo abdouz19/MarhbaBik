@@ -225,15 +225,15 @@ class _ExploreTravelerState extends State<ExploreTraveler> {
       'aures':
           'https://firebasestorage.googleapis.com/v0/b/marhbabik-pfe.appspot.com/o/regions%2Faures.jpg?alt=media&token=a5ee441e-8bfa-4e85-8e4c-473be608cd0d0',
       'centre':
-          'https://firebasestorage.googleapis.com/v0/b/marhbabik-pfe.appspot.com/o/regions%2Fcenter.jpg?alt=media&token=545ba711-7bc2-4b49-9dd5-2e6fd152ef1a',
+          'https://firebasestorage.googleapis.com/v0/b/marhbabik-pfe.appspot.com/o/regions%2Fcentre.jpg?alt=media&token=19f32ea2-e199-4169-9597-18a12b498f46',
       'est':
-          'https://firebasestorage.googleapis.com/v0/b/marhbabik-pfe.appspot.com/o/regions%2Feast.jpg?alt=media&token=69dcfb64-822c-4d65-8d33-295010e9fa13',
+          'https://firebasestorage.googleapis.com/v0/b/marhbabik-pfe.appspot.com/o/regions%2Fest.jpg?alt=media&token=77f7c3a4-699d-4d53-936b-372b8106f1f4',
       'kabylie':
           'https://firebasestorage.googleapis.com/v0/b/marhbabik-pfe.appspot.com/o/regions%2Fkabylie.jpg?alt=media&token=1eb4f611-8d8f-4705-83d8-a416fcafca25',
       'sahara':
           'https://firebasestorage.googleapis.com/v0/b/marhbabik-pfe.appspot.com/o/regions%2Fsahara.jpg?alt=media&token=c3e5bbf4-7569-4268-bcc0-036d9b7feb12',
       'ouest':
-          'https://firebasestorage.googleapis.com/v0/b/marhbabik-pfe.appspot.com/o/regions%2Fwest.jpg?alt=media&token=fe065a6e-d0bb-4e23-b3f9-520079d12f20'
+          'https://firebasestorage.googleapis.com/v0/b/marhbabik-pfe.appspot.com/o/regions%2Fouest.jpg?alt=media&token=780fa557-de90-40c6-a075-83a9d5ecae2d'
     };
 
     return GridView.builder(

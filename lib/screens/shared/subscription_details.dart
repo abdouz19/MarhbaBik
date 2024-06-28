@@ -27,7 +27,7 @@ class SubscriptionDetailsScreen extends StatefulWidget {
   final int valueColor1;
   final int valueColor2;
   final String planName;
-  final int price;
+  final double price;
   final List<String> texts;
   final int textColor;
 
@@ -40,7 +40,7 @@ class _SubscriptionDetailsScreenState extends State<SubscriptionDetailsScreen> {
   double commission = 0;
   bool isLoading = false;
   double totalPrice = 0;
-  bool isCheckingTransfer = false; // Flag to control transfer checking
+  bool isCheckingTransfer = false;
 
   ApiService apiService = ApiService();
 
@@ -48,11 +48,14 @@ class _SubscriptionDetailsScreenState extends State<SubscriptionDetailsScreen> {
     setState(() {
       isLoading = true;
     });
+    print('--------$commission');
     try {
       final commissionData = await apiService.calculateCommission(widget.price);
+      print('--------$commission');
       if (mounted) {
         setState(() {
-          commission = commissionData['commission'];
+          commission = (commissionData['commission'] as num).toDouble();
+          print('--------$commission');
           totalPrice = widget.price + commission;
         });
       }
@@ -80,7 +83,7 @@ class _SubscriptionDetailsScreenState extends State<SubscriptionDetailsScreen> {
       isCheckingTransfer = true; // Start checking transfer
     });
     try {
-      final result = await apiService.createTransfer(totalPrice, uid);
+      final result = await apiService.createTransfer(widget.price, uid);
       print(result);
 
       if (result['success']) {
@@ -173,13 +176,9 @@ class _SubscriptionDetailsScreenState extends State<SubscriptionDetailsScreen> {
                   );
                   break;
                 default:
-                  // Handle other roles or unexpected values
                   break;
               }
-            } else {
-              // Handle null user role
-              // Maybe show an error message or redirect to a default screen
-            }
+            } else {}
           }
         } else {
           // Handle incomplete transfer

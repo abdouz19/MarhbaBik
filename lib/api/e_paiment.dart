@@ -10,8 +10,9 @@ class ApiService {
       'https://devapi.slick-pay.com/api/v2/users/transfers';
   static const String _authToken =
       '1130|wKJymsDNwSpp6zebXH7KeYfVnmPREXuLUk0r6bvdbe059959';
-
-  Future<Map<String, dynamic>> calculateCommission(int amount) async {
+//4369|G2oAPkJEOE7rozz6loHDUL1lu69FOyD5Fd6HIaNr ProdApi
+  //1130|wKJymsDNwSpp6zebXH7KeYfVnmPREXuLUk0r6bvdbe059959 DevApi
+  Future<Map<String, dynamic>> calculateCommission(double amount) async {
     try {
       final response = await http.post(
         Uri.parse(_apiUrlCommission),

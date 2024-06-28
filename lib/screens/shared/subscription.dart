@@ -6,19 +6,15 @@ class SubscriptionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Icons.close),
-                ),
+              SizedBox(
+                height: 10,
               ),
-              const Text(
+              Text(
                 'Hello, Abderraouf ZOUAID',
                 style: TextStyle(
                   fontFamily: 'KastelovAxiforma',
@@ -27,10 +23,10 @@ class SubscriptionScreen extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              const SizedBox(
+              SizedBox(
                 height: 7,
               ),
-              const Text(
+              Text(
                 'Choose Your Plan',
                 style: TextStyle(
                   fontFamily: 'KastelovAxiforma',
@@ -39,37 +35,37 @@ class SubscriptionScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(
+              SizedBox(
                 height: 10,
               ),
-              const SubscriptionOffer(
+              SubscriptionOffer(
                 imagePath: 'assets/icons/house_icon.png',
                 valueColor1: 0xff7FADE9,
                 valueColor2: 0xff3F75BB,
                 planName: 'Basic',
-                price: 4999,
+                price: 1000,
                 textColor: 0xff001939,
                 texts: ['lorem ipsum lorem ipsum', 'lorem ipsum lorem ipsum'],
               ),
-              const SubscriptionOffer(
+              SubscriptionOffer(
                 imagePath: 'assets/icons/building.png',
                 valueColor1: 0xffD34113,
                 valueColor2: 0xffFF5D2B,
                 planName: 'Premium',
-                price: 14999,
+                price: 2500,
                 textColor: 0xff701B00,
                 texts: ['lorem ipsum lorem ipsum', 'lorem ipsum lorem ipsum'],
               ),
-              const SubscriptionOffer(
+              SubscriptionOffer(
                 imagePath: 'assets/icons/rocket.png',
                 valueColor1: 0xff001024,
                 valueColor2: 0xff001939,
                 planName: 'Entreprise',
-                price: 24999,
+                price: 5000,
                 textColor: 0xff3F75BB,
                 texts: ['lorem ipsum lorem ipsum', 'lorem ipsum lorem ipsum'],
               ),
-              const SizedBox(
+              SizedBox(
                 height: 60,
               ),
             ],

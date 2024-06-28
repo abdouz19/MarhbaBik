@@ -7,7 +7,7 @@ import 'package:marhba_bik/widgets/info_message.dart';
 import 'package:shimmer/shimmer.dart';
 
 class TripsOffersScreen extends StatefulWidget {
-  const TripsOffersScreen({Key? key, required this.userID}) : super(key: key);
+  const TripsOffersScreen({super.key, required this.userID});
   final String userID;
 
   @override
@@ -45,6 +45,7 @@ class _TripsOffersScreenState extends State<TripsOffersScreen> {
   }
 
   String _formatDate(Timestamp? timestamp) {
+    print('-----------------$timestamp');
     if (timestamp == null) {
       return 'N/A';
     }
@@ -122,6 +123,7 @@ class _TripsOffersScreenState extends State<TripsOffersScreen> {
                                 Map<String, dynamic>? user =
                                     data[1] as Map<String, dynamic>?;
 
+                                print('------------${booking['startDate']}');
                                 String formattedPickupDate =
                                     _formatDate(booking['startDate']);
                                 String formattedReturnDate =
@@ -378,7 +380,7 @@ class _TripsOffersScreenState extends State<TripsOffersScreen> {
                                                   ),
                                                 ),
                                               ),
-                                            ), 
+                                            ),
                                           ),
                                         ],
                                       ),

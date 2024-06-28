@@ -61,6 +61,7 @@ class _HomeOwnerOffersState extends State<HomeOwnerOffers> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Vos endroits',
           style: GoogleFonts.poppins(

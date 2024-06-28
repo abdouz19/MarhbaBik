@@ -48,15 +48,19 @@ class EmptyList extends StatelessWidget {
               child: Image.asset(image),
             ),
             const SizedBox(height: 10),
-            Text(
-              text,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: const Color(0xff001939),
-                fontWeight: FontWeight.w700,
-                fontFamily: 'KastelovAxiforma',
-                fontSize: textSize,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                text,
+                textAlign: TextAlign.center,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: const Color(0xff001939),
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'KastelovAxiforma',
+                  fontSize: textSize,
+                ),
               ),
             ),
           ],

@@ -16,7 +16,7 @@ class SubscriptionOffer extends StatelessWidget {
   final int valueColor1;
   final int valueColor2;
   final String planName;
-  final int price;
+  final double price;
   final List<String> texts;
   final int textColor;
   @override

@@ -29,7 +29,7 @@ class ProfileBar extends StatelessWidget {
                       fit: BoxFit.cover,
                     )
                   : Image.asset(
-                      'assets/images/me.jpeg',
+                      'assets/images/placeholder.png',
                       width: 50,
                       height: 50,
                       fit: BoxFit.cover,

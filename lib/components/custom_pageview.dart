@@ -57,7 +57,7 @@ class _CustomPageViewState extends State<CustomPageView> {
                   height: widget.height,
                 )
               : Image(
-                  image: const AssetImage('assets/images/me.jpeg'),
+                  image: const AssetImage('assets/images/explore_oran.jpg'),
                   fit: BoxFit.cover,
                   height: widget.height,
                 ),

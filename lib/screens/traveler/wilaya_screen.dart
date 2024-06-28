@@ -159,7 +159,7 @@ class _WilayaScreenState extends State<WilayaScreen> {
                           ),
                           Container(
                             padding: const EdgeInsets.only(left: 15),
-                            height: 280,
+                            height: 300,
                             child: DestinationsList(
                               future: FirestoreService()
                                   .fetchDestinationsByWilaya(name),

@@ -50,16 +50,16 @@ class _SendingTripRequestScreenState extends State<SendingTripRequestScreen> {
       isLoading = true;
     });
 
-    int pricePerPerson = int.parse(widget.trip.price);
+    double pricePerPerson = double.parse(widget.trip.price);
     int people = getPeople();
     double totalPrice =
         (pricePerPerson * people).toDouble(); // Use double for totalPrice
 
     try {
       final commissionData =
-          await apiService.calculateCommission(totalPrice.toInt());
+          await apiService.calculateCommission(totalPrice.toDouble());
       setState(() {
-        commission = commissionData['commission'].toDouble();
+        commission = commissionData['commission'];
       });
     } catch (e) {
       print('Error: $e');
@@ -122,19 +122,22 @@ class _SendingTripRequestScreenState extends State<SendingTripRequestScreen> {
     String targetID = widget.trip.agencyId;
     String targetType = "trips";
     String tripID = widget.trip.id;
+    Timestamp startDate = widget.trip.startDate;
+    Timestamp endDate = widget.trip.endDate;
 
     String bookingID = await FirestoreService().uploadBookingTrips(
-      tripId: tripID,
-      travelerID: travelerID,
-      targetID: targetID,
-      targetType: targetType,
-      bookingStatus: 'pending',
-      price: pricePerPerson * people,
-      commission: commission.toInt(),
-      totalPrice: totalPrice.toInt(),
-      people: people,
-      paymentMethod: paymentMethod,
-    );
+        tripId: tripID,
+        travelerID: travelerID,
+        targetID: targetID,
+        targetType: targetType,
+        bookingStatus: 'pending',
+        price: pricePerPerson * people,
+        commission: commission.toInt(),
+        totalPrice: totalPrice.toInt(),
+        people: people,
+        paymentMethod: paymentMethod,
+        endDate: endDate,
+        startDate: startDate);
 
     if (bookingID.isNotEmpty) {
       await FirebaseFirestore.instance
@@ -158,7 +161,7 @@ class _SendingTripRequestScreenState extends State<SendingTripRequestScreen> {
   Widget build(BuildContext context) {
     DateTime startDate = widget.trip.startDate.toDate();
     DateTime endDate = widget.trip.endDate.toDate();
-    
+
     // Format the dates
     String formattedStartDate = DateFormat('d MMM').format(startDate);
     String formattedEndDate = DateFormat('d MMM').format(endDate);

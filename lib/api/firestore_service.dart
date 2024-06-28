@@ -315,6 +315,8 @@ class FirestoreService {
     required int price,
     required int commission,
     required int totalPrice,
+    required Timestamp startDate,
+    required Timestamp endDate,
     required int people,
     required String paymentMethod,
   }) async {
@@ -329,6 +331,8 @@ class FirestoreService {
         'price': price,
         'commission': commission,
         'totalPrice': totalPrice,
+        'startDate': startDate,
+        'endDate': endDate,
         'people': people,
         'paymentMethod': paymentMethod,
         'createdAt': FieldValue.serverTimestamp(),

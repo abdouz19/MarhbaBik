@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:marhba_bik/widgets/custom_carousel.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:marhba_bik/screens/traveling_agency/uploading_trip_phases/uploading_trip_process.dart';
+import 'package:marhba_bik/widgets/custom_carousel.dart';
 import 'package:marhba_bik/widgets/info_message.dart';
 
 class TravelingAgencyOffers extends StatefulWidget {
@@ -15,7 +15,6 @@ class TravelingAgencyOffers extends StatefulWidget {
 }
 
 class _TravelingAgencyOffersState extends State<TravelingAgencyOffers> {
-
   Future<List<Map<String, dynamic>>>? _futureTrips;
 
   @override
@@ -26,12 +25,12 @@ class _TravelingAgencyOffersState extends State<TravelingAgencyOffers> {
 
   void showScreen() {
     showModalBottomSheet(
-      useSafeArea: true,
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return const UploadingTripProcess();
-      });
+        useSafeArea: true,
+        isScrollControlled: true,
+        context: context,
+        builder: (context) {
+          return const UploadingTripProcess();
+        });
   }
 
   Future<List<Map<String, dynamic>>> fetchUserTrips() async {
@@ -41,7 +40,9 @@ class _TravelingAgencyOffersState extends State<TravelingAgencyOffers> {
         .where('agencyId', isEqualTo: userId)
         .orderBy('uploadedAt', descending: true)
         .get();
-    return snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+    return snapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
   }
 
   Future<void> _handleRefresh() async {
@@ -60,6 +61,7 @@ class _TravelingAgencyOffersState extends State<TravelingAgencyOffers> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Vos voyages',
           style: GoogleFonts.poppins(
@@ -99,21 +101,21 @@ class _TravelingAgencyOffersState extends State<TravelingAgencyOffers> {
                         "Une erreur s'est produite lors de la récupération de vos offres.");
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return InfoMessageWidget(
-                      iconData: Icons.hourglass_empty,
-                      onTap: showScreen,
-                      message:
-                          "Vous n'avez pas encore publié d'offres. Cliquez ici pour ajouter vos offres.");
-              
+                    iconData: Icons.hourglass_empty,
+                    onTap: showScreen,
+                    message:
+                        "Vous n'avez pas encore publié d'offres. Cliquez ici pour ajouter vos offres.");
               } else {
                 List<Map<String, dynamic>> trips = snapshot.data!;
                 return ListView.builder(
                   itemCount: trips.length,
                   itemBuilder: (context, index) {
                     Map<String, dynamic> trip = trips[index];
-                    List<String> activities = List<String>.from(trip['activities']);
-                    String formattedActivities = activities.map((activity) => activity.trim()).join(', ');
+                    String formattedDescription =
+                        formatWithEllipsis(trip['description'], 58);
                     List<String> imageUrls = List<String>.from(trip['images']);
-                    DateTime startDate = (trip['startDate'] as Timestamp).toDate();
+                    DateTime startDate =
+                        (trip['startDate'] as Timestamp).toDate();
                     DateTime endDate = (trip['endDate'] as Timestamp).toDate();
                     DateTime now = DateTime.now();
                     String dateStatus;
@@ -125,7 +127,7 @@ class _TravelingAgencyOffersState extends State<TravelingAgencyOffers> {
                     } else {
                       dateStatus = "En cours";
                     }
-                    
+
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -144,16 +146,20 @@ class _TravelingAgencyOffersState extends State<TravelingAgencyOffers> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const SizedBox(height: 3,),
+                        const SizedBox(
+                          height: 3,
+                        ),
                         Text(
-                          '$formattedActivities à ${trip['wilaya']}',
+                          formattedDescription,
                           style: GoogleFonts.poppins(
                             fontSize: 17,
                             color: const Color(0xff666666),
                             fontWeight: FontWeight.w300,
                           ),
                         ),
-                        const SizedBox(height: 3,),
+                        const SizedBox(
+                          height: 3,
+                        ),
                         Text(
                           '${trip['price']} DZD/person',
                           style: GoogleFonts.poppins(
@@ -161,7 +167,9 @@ class _TravelingAgencyOffersState extends State<TravelingAgencyOffers> {
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        const SizedBox(height: 3,),
+                        const SizedBox(
+                          height: 3,
+                        ),
                         Text(
                           dateStatus,
                           style: GoogleFonts.poppins(
@@ -174,7 +182,9 @@ class _TravelingAgencyOffersState extends State<TravelingAgencyOffers> {
                                     : Colors.orange,
                           ),
                         ),
-                        const SizedBox(height: 30,),
+                        const SizedBox(
+                          height: 30,
+                        ),
                       ],
                     );
                   },
@@ -185,5 +195,12 @@ class _TravelingAgencyOffersState extends State<TravelingAgencyOffers> {
         ),
       ),
     );
+  }
+
+  String formatWithEllipsis(String text, int maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    }
+    return text.substring(0, maxLength) + '...';
   }
 }

@@ -74,13 +74,13 @@ class _SendingHouseRequestScreenState extends State<SendingHouseRequestScreen> {
       isLoading = true;
     });
 
-    int pricePerNight = int.parse(widget.house.price);
+    double pricePerNight = double.parse(widget.house.price);
     int nights = getNights();
     double totalPrice = pricePerNight * nights.toDouble();
 
     try {
       final commissionData =
-          await apiService.calculateCommission(totalPrice.toInt());
+          await apiService.calculateCommission(totalPrice);
       setState(() {
         commission = commissionData['commission'].toDouble();
       });

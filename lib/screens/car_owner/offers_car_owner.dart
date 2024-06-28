@@ -61,6 +61,7 @@ class _CarOwnerOffersState extends State<CarOwnerOffers> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Vos voitures',
           style: GoogleFonts.poppins(
@@ -100,11 +101,11 @@ class _CarOwnerOffersState extends State<CarOwnerOffers> {
                     message:
                         "Une erreur s'est produite lors de la récupération de vos offres.");
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return  InfoMessageWidget(
-                      iconData: Icons.hourglass_empty,
-                      onTap: showScreen,
-                      message:
-                          "Vous n'avez pas encore publié d'offres. Cliquez ici pour ajouter vos offres.");
+                return InfoMessageWidget(
+                    iconData: Icons.hourglass_empty,
+                    onTap: showScreen,
+                    message:
+                        "Vous n'avez pas encore publié d'offres. Cliquez ici pour ajouter vos offres.");
               } else {
                 List<Map<String, dynamic>> cars = snapshot.data!;
                 return ListView.builder(

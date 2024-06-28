@@ -76,16 +76,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const SizedBox(height: 30),
-                      Text(
+                      const Text(
                         'MarhbaBik!',
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.poppins(
-                          textStyle: const TextStyle(
-                            color: Color(0xff001939),
-                            letterSpacing: .5,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 40,
-                          ),
+                        style: TextStyle(
+                          color: Color(0xff001939),
+                          fontFamily: 'KastelovAxiforma',
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 40),

@@ -74,10 +74,10 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
     bool isOutlined = false,
   }) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 35, vertical: 5),
       width: double.infinity,
       child: SizedBox(
-        height: 45,
+        height: 48,
         child: isOutlined
             ? OutlinedButton(
                 onPressed: onPressed,
@@ -102,7 +102,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                       style: GoogleFonts.poppins(
                         color: textColor,
                         fontWeight: FontWeight.w500,
-                        fontSize: 15,
+                        fontSize: 17,
                       ),
                     ),
                   ],
@@ -124,7 +124,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                     Icon(
                       icon,
                       color: iconColor,
-                      size: 21,
+                      size: 22,
                     ),
                     const SizedBox(width: 10),
                     Text(
@@ -132,7 +132,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                       style: GoogleFonts.poppins(
                         color: textColor,
                         fontWeight: FontWeight.w500,
-                        fontSize: 15,
+                        fontSize: 17,
                       ),
                     ),
                   ],
@@ -193,40 +193,28 @@ class _GetStartedScreenState extends State<GetStartedScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         'MarhbaBik!',
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.poppins(
-                          textStyle: const TextStyle(
-                            color: Colors.white,
-                            letterSpacing: .5,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 40,
-                          ),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'KastelovAxiforma',
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 10),
-                      Text(
-                        "Explorez l'Algérie en un seul clic : découvrez, réservez, et voyagez !",
+                      const Text(
+                        "Partez à la découverte de l'Algérie avec MarhbaBik",
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.poppins(
-                          textStyle: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w300,
-                            fontSize: 20,
-                          ),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: 'KastelovAxiforma',
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                       const SizedBox(height: 30),
-                      buildButton(
-                        onPressed: () {},
-                        icon: MdiIcons.facebook,
-                        iconColor: Colors.white,
-                        text: 'Continuer avec Facebook',
-                        textColor: Colors.white,
-                        buttonColor: Colors.transparent,
-                        isOutlined: true,
-                      ),
                       buildButton(
                         onPressed: () {
                           signInWithGoogle(context);

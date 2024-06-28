@@ -10,7 +10,7 @@ class SubscriptionHeader extends StatelessWidget {
 
   final int valueColor1;
   final int valueColor2;
-  final int price;
+  final double price;
   final String planName;
 
   @override

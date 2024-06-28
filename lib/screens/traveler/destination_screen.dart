@@ -53,6 +53,11 @@ class _DestinationScreenState extends State<DestinationScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     List<String> images = widget.destination.otherPicturesUrls;
     String title = widget.destination.title;
@@ -115,7 +120,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
                           color: Color.fromARGB(255, 168, 168, 168),
                         ),
                         onPressed: () {
-                          // Share button action
+                          
                         },
                       ),
                     ),
@@ -185,8 +190,8 @@ class _DestinationScreenState extends State<DestinationScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
-                        'Place ${category} au coeur de ${_getRegionDisplayName(region)}, $wilaya.',
-                          style: GoogleFonts.poppins(
+                      'Place ${category} au coeur de ${_getRegionDisplayName(region)}, $wilaya.',
+                      style: GoogleFonts.poppins(
                         color: const Color(0xff8E8E8E),
                         fontSize: 15,
                         fontWeight: FontWeight.w300,
@@ -279,4 +284,3 @@ String _getRegionDisplayName(String region) {
       return region;
   }
 }
-

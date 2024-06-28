@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">marhba_bik</string>
+    <string name="facebook_app_id">474711035241292</string>
+    <string name="fb_login_protocol_scheme">fb5e966a39e7aa7aa00b9abebb1df8101f</string>
+
+</resources>

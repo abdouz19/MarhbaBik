@@ -22,11 +22,12 @@ class InfoMessageWidget extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: InkWell(
               onTap: onTap,
               child: Text(
                 message,
+                maxLines: 3,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 19,
