@@ -1,18 +1,41 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
+import 'package:marhba_bik/api/firestore_service.dart';
 
 class ApiService {
-  static const String _apiUrlCommission =
-      'https://devapi.slick-pay.com/api/v2/users/transfers/commission';
+  late String _apiUrlCommission;
+  late String _apiUrlTransfer;
+  late String _authToken;
+  bool _isInitialized = false;
 
-  static const String _apiUrlTransfer =
-      'https://devapi.slick-pay.com/api/v2/users/transfers';
-  static const String _authToken =
-      '1130|wKJymsDNwSpp6zebXH7KeYfVnmPREXuLUk0r6bvdbe059959';
-//4369|G2oAPkJEOE7rozz6loHDUL1lu69FOyD5Fd6HIaNr ProdApi
-  //1130|wKJymsDNwSpp6zebXH7KeYfVnmPREXuLUk0r6bvdbe059959 DevApi
+  ApiService() {
+    _initialize();
+  }
+
+  Future<void> _initialize() async {
+    try {
+      final config = await FirestoreService().fetchPaymentConfig();
+      _apiUrlCommission = config['link-commession']!;
+      _apiUrlTransfer = config['link-transfer']!;
+      _authToken = config['public-key']!;
+      _isInitialized = true;
+      //print(_apiUrlCommission);
+      //print(_apiUrlTransfer);
+      //print(_authToken);
+    } catch (e) {
+      throw Exception('Failed to initialize API service: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> _ensureInitialized() async {
+    if (!_isInitialized) {
+      await _initialize();
+    }
+    return {};
+  }
+
   Future<Map<String, dynamic>> calculateCommission(double amount) async {
+    await _ensureInitialized(); // Ensure initialization
     try {
       final response = await http.post(
         Uri.parse(_apiUrlCommission),
@@ -46,8 +69,13 @@ class ApiService {
 
   Future<Map<String, dynamic>> createTransfer(
       double amount, String contact) async {
-    print('Contact value before transfer: $contact');
+    await _ensureInitialized(); // Ensure initialization
+    //print('Contact value before transfer: $contact');
     try {
+      if (contact.isEmpty) {
+        throw Exception('Please select a valid contact');
+      }
+
       final body = jsonEncode({
         'amount': amount,
         'contacte': contact,
@@ -64,14 +92,12 @@ class ApiService {
         headers: headers,
         body: body,
       );
-      if (contact.isEmpty) {
-        throw Exception('Please select a valid contact');
-      }
+
       // Log detailed request and response information
-      print('Request Headers: $headers');
-      print('Request Body: $body');
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      //print('Request Headers: $headers');
+      //print('Request Body: $body');
+      //print('Response status: ${response.statusCode}');
+      //print('Response body: ${response.body}');
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -96,8 +122,8 @@ class ApiService {
     }
   }
 
-  // method to get transfer details
   Future<Map<String, dynamic>> getTransferDetails(String transferId) async {
+    await _ensureInitialized(); // Ensure initialization
     final url = '$_apiUrlTransfer/$transferId';
 
     try {

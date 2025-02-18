@@ -16,20 +16,30 @@ import 'package:marhba_bik/screens/traveler/home.dart';
 import 'package:marhba_bik/screens/traveler/traveler_info_form.dart';
 import 'package:marhba_bik/screens/traveling_agency/travelling_agency_home.dart';
 import 'package:marhba_bik/screens/traveling_agency/travelling_agency_info_form.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 var kColorScheme = ColorScheme.fromSeed(seedColor: const Color(0xff3F75BB));
 
+Future<void> requestNotificationPermission() async {
+  if (await Permission.notification.isDenied) {
+    await Permission.notification.request();
+  }
+}
+
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
   // Set French locale for message formatting using await
   String locale = await Intl.getCurrentLocale();
   Intl.defaultLocale = locale; // Set the default locale
-    try {
+
+  try {
     await Firebase.initializeApp();
   } catch (e) {
     print('Error initializing Firebase: $e');
   }
+
+  await requestNotificationPermission(); // Request notification permission on startup
+
   runApp(const MyApp());
 }
 
@@ -96,7 +106,7 @@ class _MyAppState extends State<MyApp> {
     if (currentUser == null) {
       return '/getstarted';
     } else if (!currentUser.emailVerified) {
-      return '/getstarted'; // Redirect to get started if email is not verified
+      return '/getstarted';
     } else {
       return await getUserRole(currentUser.uid);
     }

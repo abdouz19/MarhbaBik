@@ -58,10 +58,19 @@ class _TripsOffersScreenState extends State<TripsOffersScreen> {
   }
 
   String _formatPaymentMethod(String paymentMethod) {
-    return paymentMethod
-        .split('_')
-        .map((word) => '${word[0].toUpperCase()}${word.substring(1)}')
-        .join(' ');
+    final Map<String, String> paymentMethodTranslations = {
+      'hand_to_hand': 'Main à Main',
+      'credit_card': 'Carte de Crédit',
+    };
+
+    if (paymentMethodTranslations.containsKey(paymentMethod)) {
+      return paymentMethodTranslations[paymentMethod]!;
+    } else {
+      return paymentMethod
+          .split('_')
+          .map((word) => '${word[0].toUpperCase()}${word.substring(1)}')
+          .join(' ');
+    }
   }
 
   Future<void> _updateBookingStatus(
@@ -71,8 +80,8 @@ class _TripsOffersScreenState extends State<TripsOffersScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: status == 'accepted'
-            ? const Text('Booking accepted')
-            : const Text('Booking declined'),
+            ? const Text('Réservation acceptée')
+            : const Text('Réservation refusée'),
         duration: const Duration(seconds: 2),
       ),
     );

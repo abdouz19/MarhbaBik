@@ -28,7 +28,7 @@ class SubscriptionOffer extends StatelessWidget {
             MaterialPageRoute(
               builder: (context) => SubscriptionDetailsScreen(
                 imagePath: imagePath,
-                textColor:textColor ,
+                textColor: textColor,
                 texts: texts,
                 valueColor1: valueColor1,
                 valueColor2: valueColor2,
@@ -98,6 +98,8 @@ class SubscriptionOffer extends StatelessWidget {
                     const SizedBox(width: 5),
                     Text(
                       texts[0],
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontFamily: 'KastelovAxiforma',
                         fontSize: 12,
@@ -120,6 +122,8 @@ class SubscriptionOffer extends StatelessWidget {
                     const SizedBox(width: 5),
                     Text(
                       texts[1],
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontFamily: 'KastelovAxiforma',
                         fontSize: 12,

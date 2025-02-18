@@ -1,5 +1,19 @@
 enum UserTypes { traveler, homeOwner, carOwner, travellingAgency }
 
+const Map<UserTypes, String> userTypesTranslations = {
+  UserTypes.traveler: 'voyageur',
+  UserTypes.homeOwner: 'propriétaire de maison',
+  UserTypes.carOwner: 'propriétaire de voiture',
+  UserTypes.travellingAgency: 'agence de voyage',
+};
+
+const Map<UserTypes, String> userTypesForDatabase = {
+  UserTypes.traveler: 'traveler',
+  UserTypes.homeOwner: 'home owner',
+  UserTypes.carOwner: 'car owner',
+  UserTypes.travellingAgency: 'travelling agency',
+};
+
 final List<String> placeTypes = [
   "Villa",
   "Apartment",

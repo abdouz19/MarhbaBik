@@ -281,7 +281,7 @@ class _TravelerInfoFormScreenState extends State<TravelerInfoFormScreen> {
                     ),
                     CustomizedTextFormField(
                       label: 'Prénom',
-                      hintText: 'Ex: Mohamed Abderraouf',
+                      hintText: 'Ex: Prénom',
                       textEditingController: firstName,
                       validator: (v) {
                         if (v == "") {
@@ -295,7 +295,7 @@ class _TravelerInfoFormScreenState extends State<TravelerInfoFormScreen> {
                     ),
                     CustomizedTextFormField(
                       label: 'Nom',
-                      hintText: 'Ex: Zouaid',
+                      hintText: 'Ex: Nom',
                       textEditingController: lastName,
                       validator: (v) {
                         if (v == "") {
@@ -309,7 +309,7 @@ class _TravelerInfoFormScreenState extends State<TravelerInfoFormScreen> {
                     ),
                     WilayaDropdown(
                       controller: wilaya,
-                      hintText: 'Ex: Bouira',
+                      hintText: 'Sélectionner une région',
                       labelText: 'Wilaya',
                       validator: (v) {
                         if (v == "") {
@@ -329,7 +329,7 @@ class _TravelerInfoFormScreenState extends State<TravelerInfoFormScreen> {
                     ),
                     CustomizedTextFormField(
                       label: 'Numéro de téléphone',
-                      hintText: 'Ex: 0562202210',
+                      hintText: 'Ex: Numéro de téléphone',
                       textEditingController: phoneNumber,
                       keyboardType: TextInputType.number,
                       validator: (v) {

@@ -142,8 +142,7 @@ class _SubscriptionDetailsScreenState extends State<SubscriptionDetailsScreen> {
           await FirestoreService().saveSubscription(uid, subscriptionData);
 
           // Handle completed transfer
-          print(
-              '------------------------------------------------------Transfer completed successfully and subscription saved.');
+          print('------------------------------------------------------Transfer completed successfully and subscription saved.');
 
           // Navigate to OffersCarOwnerScreen
           if (mounted) {

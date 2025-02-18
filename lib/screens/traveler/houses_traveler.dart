@@ -32,6 +32,25 @@ class _HousesTravelerScreenState extends State<HousesTraveler> {
 
   @override
   Widget build(BuildContext context) {
+    // Get the current month
+    final int currentMonth = DateTime.now().month;
+    // Map of months in French
+    const Map<int, String> monthTranslations = {
+      1: 'janvier',
+      2: 'février',
+      3: 'mars',
+      4: 'avril',
+      5: 'mai',
+      6: 'juin',
+      7: 'juillet',
+      8: 'août',
+      9: 'septembre',
+      10: 'octobre',
+      11: 'novembre',
+      12: 'décembre',
+    };
+
+    final String monthName = monthTranslations[currentMonth] ?? 'mois inconnu';
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -186,7 +205,7 @@ class _HousesTravelerScreenState extends State<HousesTraveler> {
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
                               fontFamily: 'KastelovAxiforma',
-                              fontSize: 32,
+                              fontSize: 31,
                             ),
                           ),
                           const Text(
@@ -196,7 +215,7 @@ class _HousesTravelerScreenState extends State<HousesTraveler> {
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
                               fontFamily: 'KastelovAxiforma',
-                              fontSize: 32,
+                              fontSize: 31,
                             ),
                           ),
                           const Text(
@@ -206,7 +225,7 @@ class _HousesTravelerScreenState extends State<HousesTraveler> {
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
                               fontFamily: 'KastelovAxiforma',
-                              fontSize: 32,
+                              fontSize: 31,
                             ),
                           ),
                           const SizedBox(
@@ -549,10 +568,10 @@ class _HousesTravelerScreenState extends State<HousesTraveler> {
                               fontSize: 32,
                             ),
                           ),
-                          const Text(
-                            'pour juin',
+                          Text(
+                            'pour $monthName',
                             softWrap: true,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w700,
                               fontFamily: 'KastelovAxiforma',
@@ -580,9 +599,9 @@ class _HousesTravelerScreenState extends State<HousesTraveler> {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          const RecommandedScreen(
+                                      builder: (context) => RecommandedScreen(
                                         type: 'recommended',
+                                        month: monthName,
                                       ),
                                     ));
                               },

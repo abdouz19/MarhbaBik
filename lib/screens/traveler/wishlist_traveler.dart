@@ -41,7 +41,7 @@ class _WishlistTravelerState extends State<WishlistTraveler> {
             const Padding(
               padding: EdgeInsets.only(left: 10, top: 20),
               child: Text(
-                'Wishlists',
+                'Favoris',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   color: Color(0xff001939),

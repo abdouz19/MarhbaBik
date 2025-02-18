@@ -119,9 +119,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
                           Icons.share,
                           color: Color.fromARGB(255, 168, 168, 168),
                         ),
-                        onPressed: () {
-                          
-                        },
+                        onPressed: () {},
                       ),
                     ),
                   ),
@@ -237,7 +235,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 20),
                       child: MaterialButtonAuth(
-                          label: 'Explore more',
+                          label: 'Explore plus',
                           onPressed: () async {
                             Wilaya? wilaya = await _wilayaFuture;
                             if (wilaya != null) {

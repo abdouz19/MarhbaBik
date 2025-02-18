@@ -93,10 +93,19 @@ class _TravelerBookingsScreenState extends State<TravelerBookingsScreen> {
   }
 
   String _formatPaymentMethod(String paymentMethod) {
-    return paymentMethod
-        .split('_')
-        .map((word) => '${word[0].toUpperCase()}${word.substring(1)}')
-        .join(' ');
+    final Map<String, String> paymentMethodTranslations = {
+      'hand_to_hand': 'Main à Main',
+      'credit_card': 'Carte de Crédit',
+    };
+
+    if (paymentMethodTranslations.containsKey(paymentMethod)) {
+      return paymentMethodTranslations[paymentMethod]!;
+    } else {
+      return paymentMethod
+          .split('_')
+          .map((word) => '${word[0].toUpperCase()}${word.substring(1)}')
+          .join(' ');
+    }
   }
 
   Future<void> _cancelBooking(
@@ -349,19 +358,26 @@ class _TravelerBookingsScreenState extends State<TravelerBookingsScreen> {
                                           ),
                                         ),
                                         Text(
-                                          booking['bookingStatus'],
+                                          // Translate the booking status to French
+                                          booking['bookingStatus'] == 'accepted'
+                                              ? 'accepté'
+                                              : booking['bookingStatus'] ==
+                                                      'declined'
+                                                  ? 'refusé'
+                                                  : booking['bookingStatus'] ==
+                                                          'canceled'
+                                                      ? 'annulé'
+                                                      : 'en attente',
                                           style: TextStyle(
                                             color: booking['bookingStatus'] ==
                                                     'accepted'
                                                 ? Colors.green
                                                 : booking['bookingStatus'] ==
-                                                        'declined'
+                                                            'declined' ||
+                                                        booking['bookingStatus'] ==
+                                                            'canceled'
                                                     ? Colors.red
-                                                    : booking['bookingStatus'] ==
-                                                            'canceled' // Added this condition
-                                                        ? Colors
-                                                            .red // Set color to red for canceled status
-                                                        : Colors.orange,
+                                                    : Colors.orange,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 15,
                                           ),
@@ -590,11 +606,9 @@ class _TravelerBookingsScreenState extends State<TravelerBookingsScreen> {
   }
 
   Widget _buildNoBookingsWidget() {
-    return 
-    const InfoMessageWidget(
+    return const InfoMessageWidget(
         iconData: Icons.hourglass_empty,
         message: "Pas encore de demandes de réservation.");
-      
   }
 
   Widget _buildLoadingSkeleton() {

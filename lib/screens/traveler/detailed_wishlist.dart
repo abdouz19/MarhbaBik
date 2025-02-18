@@ -7,6 +7,14 @@ import 'package:marhba_bik/widgets/items/second_wilaya_item.dart';
 import 'package:marhba_bik/widgets/items/trip_item.dart';
 import 'package:shimmer/shimmer.dart';
 
+const Map<String, String> collectionTypeTranslations = {
+  'houses': 'maisons',
+  'cars': 'voitures',
+  'trips': 'voyages',
+  'wilayas': 'wilayas',
+  'destinations': 'destinations',
+};
+
 class DetailedWishlistScreen extends StatelessWidget {
   final List<String> collectionData;
   final String collectionType;
@@ -20,11 +28,13 @@ class DetailedWishlistScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final firestoreService = FirestoreService();
+    final translatedCollectionType =
+        collectionTypeTranslations[collectionType] ?? collectionType;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'My ${collectionType.toUpperCase()[0]}${collectionType.substring(1)} Wishlist',
+          'Mes préférés $translatedCollectionType',
         ),
       ),
       body: Center(
@@ -36,7 +46,6 @@ class DetailedWishlistScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final itemId = collectionData[index];
                   Future<dynamic>? futureItem;
-
                   switch (collectionType) {
                     case 'cars':
                       futureItem = firestoreService.getCarModelById(itemId);
@@ -59,7 +68,8 @@ class DetailedWishlistScreen extends StatelessWidget {
                   }
 
                   return futureItem == null
-                      ? const Center(child: Text('Type de collection introuvable'))
+                      ? const Center(
+                          child: Text('Type de collection introuvable'))
                       : Container(
                           margin: const EdgeInsets.only(top: 20),
                           child: Center(
@@ -122,7 +132,8 @@ class DetailedWishlistScreen extends StatelessWidget {
                                         );
                                       default:
                                         return const Center(
-                                          child: Text('Disponible prochainement'),
+                                          child:
+                                              Text('Disponible prochainement'),
                                         );
                                     }
                                   } else {

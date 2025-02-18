@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "1079641719409-kg6on0fbaqs8hbmkfdp96thadlnq479p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.marhba_bik",
+            "certificate_hash": "74032a217f7ae772484f6da4c812d78667082203"
+          }
+        },
+        {
           "client_id": "1079641719409-hcvv7tb6nne6q21tteb9frqg9msnkaps.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -37,6 +45,57 @@
             {
               "client_id": "1079641719409-hcvv7tb6nne6q21tteb9frqg9msnkaps.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1079641719409-3jnps563l3fpnaul41jhkpj0hjse5fhd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.marhbaBik"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1079641719409:android:15a1543c0cf00d8bf111d0",
+        "android_client_info": {
+          "package_name": "com.marhbabik.marhba_bik"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1079641719409-k8is4ro2mhc38hca14snldj832g4o7au.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.marhbabik.marhba_bik",
+            "certificate_hash": "3c055fd9db0db1c580144446efa5c18fb6d887d7"
+          }
+        },
+        {
+          "client_id": "1079641719409-hcvv7tb6nne6q21tteb9frqg9msnkaps.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAHD8TifkIGlTYjA597FfOdW3XEEPP4Hd4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1079641719409-hcvv7tb6nne6q21tteb9frqg9msnkaps.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1079641719409-3jnps563l3fpnaul41jhkpj0hjse5fhd.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.marhbaBik"
+              }
             }
           ]
         }

@@ -803,4 +803,53 @@ class FirestoreService {
 
     return count;
   }
+
+  Future<List<String>> fetchFavorites(String collectionName) async {
+    try {
+      final docSnapshot = await FirebaseFirestore.instance
+          .collection('controls')
+          .doc(collectionName)
+          .get();
+      final data = docSnapshot.data();
+      final List<dynamic> favorites = data?['favorites'] ?? [];
+      return favorites.map((item) => item as String).toList();
+    } catch (e) {
+      print('Error fetching favorites: $e');
+      return [];
+    }
+  }
+
+  Future<Map<String, String>> fetchRecommendedMap() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('controls')
+        .doc('recommended')
+        .get();
+
+    if (snapshot.exists && snapshot.data() != null) {
+      Map<String, dynamic> data = snapshot.data()!;
+      Map<String, dynamic> recommendedMap = data['recommended'];
+      return recommendedMap
+          .map((key, value) => MapEntry(key, value.toString()));
+    } else {
+      throw Exception('Failed to load recommended data');
+    }
+  }
+
+  Future<Map<String, String>> fetchPaymentConfig() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('controls')
+        .doc('payment')
+        .get();
+
+    if (snapshot.exists && snapshot.data() != null) {
+      Map<String, dynamic> data = snapshot.data()!;
+      return {
+        'link-commession': data['link-commession'] as String,
+        'link-transfer': data['link-transfer'] as String,
+        'public-key': data['public-key'] as String,
+      };
+    } else {
+      throw Exception('Failed to load payment configuration data');
+    }
+  }
 }

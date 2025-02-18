@@ -24,7 +24,7 @@ class SendingTripRequestScreen extends StatefulWidget {
 class _SendingTripRequestScreenState extends State<SendingTripRequestScreen> {
   String? _paymentMethod;
   int selectedCapacity = 1;
-  double commission = 0.0;
+  double commission = 0;
   bool isLoading = false;
 
   final ApiService apiService = ApiService();
@@ -52,14 +52,12 @@ class _SendingTripRequestScreenState extends State<SendingTripRequestScreen> {
 
     double pricePerPerson = double.parse(widget.trip.price);
     int people = getPeople();
-    double totalPrice =
-        (pricePerPerson * people).toDouble(); // Use double for totalPrice
-
+    double totalPrice = (pricePerPerson * people).toDouble();
     try {
       final commissionData =
           await apiService.calculateCommission(totalPrice.toDouble());
       setState(() {
-        commission = commissionData['commission'];
+        commission = commissionData['commission'].toDouble();
       });
     } catch (e) {
       print('Error: $e');
@@ -72,7 +70,7 @@ class _SendingTripRequestScreenState extends State<SendingTripRequestScreen> {
       });
     }
 
-    return totalPrice + commission; // Return total price including commission
+    return totalPrice + commission;
   }
 
   void presentDialog(bool requestSent, String message) {

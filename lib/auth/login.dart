@@ -145,40 +145,48 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 25),
                       MaterialButtonAuth(
-                          label: 'Connexion',
-                          onPressed: () async {
-                            // Show circular progress indicator
-                            showDialog(
-                              context: context,
-                              barrierDismissible:
-                                  false, // Prevent dismissing the dialog by tapping outside
-                              builder: (BuildContext context) {
-                                return const Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              },
-                            );
+                        label: 'Connexion',
+                        onPressed: () async {
+                          // Show circular progress indicator
+                          showDialog(
+                            context: context,
+                            barrierDismissible:
+                                false, // Prevent dismissing the dialog by tapping outside
+                            builder: (BuildContext context) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                          );
 
-                            if (formState.currentState!.validate()) {
-                              try {
-                                final credential = await FirebaseAuth.instance
-                                    .signInWithEmailAndPassword(
-                                  email: emailController.text,
-                                  password: passwordController.text,
-                                );
-                                if (credential.user!.emailVerified) {
-                                  // Get user data from Firestore
-                                  final userData = await firestore
-                                      .collection('users')
-                                      .doc(credential.user!.uid)
-                                      .get();
-                                  final userRole = userData['role'];
-                                  final personalDataProvided =
-                                      userData['personalDataProvided'] ?? false;
+                          if (formState.currentState!.validate()) {
+                            try {
+                              final credential = await FirebaseAuth.instance
+                                  .signInWithEmailAndPassword(
+                                email: emailController.text,
+                                password: passwordController.text,
+                              );
+                              if (credential.user!.emailVerified) {
+                                // Get user data from Firestore
+                                final userData = await firestore
+                                    .collection('users')
+                                    .doc(credential.user!.uid)
+                                    .get();
+                                final userRole = userData['role'];
+                                final personalDataProvided =
+                                    userData['personalDataProvided'] ?? false;
 
-                                  await _userService.storeUserToken();
+                                await _userService.storeUserToken();
 
-                                  // Check if personal data is provided
+                                if (userRole == 'traveler') {
+                                  // For travelers, skip subscription check and navigate based on personal data
+                                  if (personalDataProvided) {
+                                    onPushScreen('/traveler_home');
+                                  } else {
+                                    onPushScreen('/traveler_info_form');
+                                  }
+                                } else {
+                                  // For other users, check if personal data is provided
                                   if (personalDataProvided) {
                                     // Check if subscription is paid
                                     final isSubscriptionPaid =
@@ -189,9 +197,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     // Navigate based on user role and subscription payment
                                     if (isSubscriptionPaid) {
                                       switch (userRole) {
-                                        case 'traveler':
-                                          onPushScreen('/traveler_home');
-                                          break;
                                         case 'home owner':
                                           onPushScreen('/home_owner_home');
                                           break;
@@ -213,9 +218,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   } else {
                                     // Redirect to info form based on user role
                                     switch (userRole) {
-                                      case 'traveler':
-                                        onPushScreen('/traveler_info_form');
-                                        break;
                                       case 'home owner':
                                         onPushScreen('/home_owner_info_form');
                                         break;
@@ -231,33 +233,36 @@ class _LoginScreenState extends State<LoginScreen> {
                                             'User role not recognized.');
                                     }
                                   }
-                                } else {
-                                  presentDialog(
-                                      'Vérification du compte requise',
-                                      'Veuillez vérifier votre e-mail et cliquer sur le lien fourni pour vérifier votre compte. Une fois vérifié, votre compte sera activé.');
                                 }
-                              } on FirebaseAuthException catch (e) {
-                                String errorMessage = '';
-                                if (e.code == 'user-not-found') {
-                                  errorMessage = 'Désolé, nous n'
-                                      'avons pas trouvé de compte associé à cette adresse e-mail';
-                                } else if (e.code == 'wrong-password') {
-                                  errorMessage =
-                                      'Le mot de passe que vous avez saisi est incorrect. Veuillez réessayer.';
-                                } else {
-                                  errorMessage =
-                                      'Une erreur s\'est produite: ${e.message}';
-                                }
-                                // Close the circular progress indicator dialog
-                                Navigator.pop(context);
+                              } else {
                                 presentDialog(
-                                    'Erreur d\'authentification', errorMessage);
+                                  'Vérification du compte requise',
+                                  'Veuillez vérifier votre e-mail et cliquer sur le lien fourni pour vérifier votre compte. Une fois vérifié, votre compte sera activé.',
+                                );
                               }
-                            } else {
+                            } on FirebaseAuthException catch (e) {
+                              String errorMessage = '';
+                              if (e.code == 'user-not-found') {
+                                errorMessage =
+                                    'Désolé, nous n\'avons pas trouvé de compte associé à cette adresse e-mail';
+                              } else if (e.code == 'wrong-password') {
+                                errorMessage =
+                                    'Le mot de passe que vous avez saisi est incorrect. Veuillez réessayer.';
+                              } else {
+                                errorMessage =
+                                    'Une erreur s\'est produite: ${e.message}';
+                              }
                               // Close the circular progress indicator dialog
                               Navigator.pop(context);
+                              presentDialog(
+                                  'Erreur d\'authentification', errorMessage);
                             }
-                          }),
+                          } else {
+                            // Close the circular progress indicator dialog
+                            Navigator.pop(context);
+                          }
+                        },
+                      ),
                       const SizedBox(height: 10),
                       InkWell(
                         onTap: () {

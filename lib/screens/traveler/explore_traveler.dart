@@ -9,6 +9,7 @@ import 'package:marhba_bik/screens/traveler/wilaya_screen.dart';
 import 'package:marhba_bik/widgets/items/region_item.dart';
 import 'package:marhba_bik/widgets/lists/destination_listview.dart';
 import 'package:marhba_bik/widgets/lists/wilaya_listview.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ExploreTraveler extends StatefulWidget {
   const ExploreTraveler({super.key});
@@ -22,13 +23,15 @@ class _ExploreTravelerState extends State<ExploreTraveler> {
   Future<List<Wilaya>>? _futureWilayas;
   List<Wilaya> _filteredWilayas = [];
   bool _isSearching = false;
-  late Future<List<Wilaya>> futureSpecialWilayas;
+  late Future<List<String>> futureSpecialWilayasIDs;
+  late Future<List<String>> futureSpecialDestinations;
 
   @override
   void initState() {
     super.initState();
-    futureSpecialWilayas =
-        FirestoreService().fetchSpecialWilayas(['10', '06', '31', '19']);
+    futureSpecialWilayasIDs = FirestoreService().fetchFavorites('wilayas');
+    futureSpecialDestinations =
+        FirestoreService().fetchFavorites('destinations');
     _futureWilayas = FirestoreService().fetchWilayas();
     _futureWilayas?.then((wilayas) {
       setState(() {
@@ -87,59 +90,83 @@ class _ExploreTravelerState extends State<ExploreTraveler> {
                       _buildPickRegionButton(),
                       const SizedBox(height: 40.0),
                       _buildSectionTitle('Partez à la découverte'),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      WilayaList(
-                        type: 'vertical',
-                        future: FirestoreService()
-                            .fetchSpecialWilayas(['06', '10', '35']),
+                      const SizedBox(height: 8),
+                      FutureBuilder<List<String>>(
+                        future: futureSpecialWilayasIDs,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return _buildShimmerList();
+                          } else if (snapshot.hasError) {
+                            return Center(
+                                child: Text('Error: ${snapshot.error}'));
+                          } else if (!snapshot.hasData ||
+                              snapshot.data == null) {
+                            return const Center(
+                                child: Text('No data available'));
+                          }
+
+                          final wilayasIDs = snapshot.data!;
+                          return WilayaList(
+                            type: 'vertical',
+                            future: FirestoreService()
+                                .fetchSpecialWilayas(wilayasIDs),
+                          );
+                        },
                       ),
                       _buildSeeAllButton(
                         onPressed: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const RecommandedScreen(
-                                  type: 'wilayas',
-                                ),
-                              ));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const RecommandedScreen(type: 'wilayas'),
+                            ),
+                          );
                         },
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20),
                       _buildSectionTitle('Escapades à proximité'),
-                      const SizedBox(
-                        height: 8,
-                      ),
-                      DestinationsList(
-                        future: FirestoreService().fetchSpecialDestinations(
-                            ['Yema gouraya', 'Lac vert', "Makam al shahid"]),
-                        type: 'vertical',
+                      const SizedBox(height: 8),
+                      FutureBuilder<List<String>>(
+                        future: futureSpecialDestinations,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return _buildShimmerList(); 
+                          } else if (snapshot.hasError) {
+                            return Center(
+                                child: Text('Error: ${snapshot.error}'));
+                          } else if (!snapshot.hasData ||
+                              snapshot.data == null) {
+                            return const Center(
+                                child: Text('No data available'));
+                          }
+
+                          final destinations = snapshot.data!;
+                          return DestinationsList(
+                            future: FirestoreService()
+                                .fetchSpecialDestinations(destinations),
+                            type: 'vertical',
+                          );
+                        },
                       ),
                       _buildSeeAllButton(
                         onPressed: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const RecommandedScreen(
-                                  type: 'destinations',
-                                ),
-                              ));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const RecommandedScreen(type: 'destinations'),
+                            ),
+                          );
                         },
                       ),
-                      const SizedBox(
-                        height: 20,
-                      ),
+                      const SizedBox(height: 20),
                       _buildSectionTitle('Régions à ne pas manquer'),
-                      const SizedBox(
-                        height: 18,
-                      ),
+                      const SizedBox(height: 18),
                       _buildSpecialWilayasGrid(),
-                      const SizedBox(
-                        height: 50,
-                      ),
+                      const SizedBox(height: 50),
                     ],
                   ),
                 ),
@@ -198,10 +225,11 @@ class _ExploreTravelerState extends State<ExploreTraveler> {
       child: MaterialButtonAuth(
         onPressed: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const RegionsScreen(),
-              ));
+            context,
+            MaterialPageRoute(
+              builder: (context) => const RegionsScreen(),
+            ),
+          );
         },
         label: 'Choisissez une région',
       ),
@@ -237,20 +265,21 @@ class _ExploreTravelerState extends State<ExploreTraveler> {
     };
 
     return GridView.builder(
-        shrinkWrap: true,
-        padding: EdgeInsets.zero,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
-        ),
-        itemCount: regions.length,
-        itemBuilder: (context, index) {
-          String regionName = regions.keys.elementAt(index);
-          String? imageUrl = regions[regionName];
-          return RegionItem(name: regionName, imageUrl: imageUrl!);
-        });
+      shrinkWrap: true,
+      padding: EdgeInsets.zero,
+      physics: const NeverScrollableScrollPhysics(),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ),
+      itemCount: regions.length,
+      itemBuilder: (context, index) {
+        String regionName = regions.keys.elementAt(index);
+        String? imageUrl = regions[regionName];
+        return RegionItem(name: regionName, imageUrl: imageUrl!);
+      },
+    );
   }
 
   Widget _buildSearchResults() {
@@ -351,3 +380,63 @@ class WilayaTile extends StatelessWidget {
     );
   }
 }
+
+  Widget _buildShimmerList() {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: 3,
+      padding: EdgeInsets.zero,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 7.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Container(
+                  width: 160,
+                  height: 120,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 3),
+                    Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        height: 20.0,
+                        width: 100.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        height: 15.0,
+                        width: 150.0,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }

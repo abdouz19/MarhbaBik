@@ -30,11 +30,13 @@ class _SignupScreen extends State<SignupScreen> {
   }
 
   String formatUserType(UserTypes userType) {
-    String userTypeString = userType.toString().split('.').last;
-    return userTypeString
-        .replaceAllMapped(RegExp(r'([a-z])([A-Z])'),
-            (match) => '${match.group(1)} ${match.group(2)}')
-        .toLowerCase();
+    return userTypesTranslations[userType] ??
+        userType.toString().split('.').last;
+  }
+
+  String getUserTypeForDatabase(UserTypes userType) {
+    return userTypesForDatabase[userType] ??
+        userType.toString().split('.').last;
   }
 
   void onPushScreen(String route) {
@@ -82,7 +84,7 @@ class _SignupScreen extends State<SignupScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(height: 30),
-                    Text(
+                    const Text(
                       'Rejoignez MarhbaBik',
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -211,7 +213,7 @@ class _SignupScreen extends State<SignupScreen> {
                                 .set({
                               'uid': userUid,
                               'email': emailController.text,
-                              'role': formatUserType(_selectedUserType),
+                              'role': getUserTypeForDatabase(_selectedUserType),
                               'personalDataProvided': false,
                             });
                             // send Email Verification
