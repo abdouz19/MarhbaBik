@@ -4,12 +4,14 @@ class MessageTextField extends StatelessWidget {
   final TextEditingController controller;
   final VoidCallback onSend;
   final String hintText;
+  final FocusNode? focusNode;
 
   const MessageTextField({
     super.key,
     required this.controller,
     required this.onSend,
     this.hintText = "Write a message...",
+    required this.focusNode
   });
 
   @override
@@ -25,6 +27,7 @@ class MessageTextField extends StatelessWidget {
           children: [
             Expanded(
               child: TextField(
+                focusNode: focusNode,
                 controller: controller,
                 decoration: InputDecoration(
                   hintText: hintText,
