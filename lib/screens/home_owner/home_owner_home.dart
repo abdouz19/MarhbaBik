@@ -17,7 +17,7 @@ class _HomeOwnerHomeScreen extends State<HomeOwnerHomeScreen> {
   int index = 1;
 
   final screens = [
-    const MessagesScreen(),
+    MessagesScreen(),
     const HomeOwnerOffers(),
     const HomeOwnerProfile()
   ];

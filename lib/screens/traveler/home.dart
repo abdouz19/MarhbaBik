@@ -23,7 +23,7 @@ class _TravelerHomeScreenState extends State<TravelerHomeScreen> {
     const HousesTraveler(),
     const ExploreTraveler(),
     const WishlistTraveler(),
-    const MessagesScreen(),
+    MessagesScreen(),
     const ProfileTraveler(),
   ];
 

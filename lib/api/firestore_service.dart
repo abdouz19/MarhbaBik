@@ -416,6 +416,20 @@ class FirestoreService {
     return _getDocumentById('users', userID);
   }
 
+  Future<String?> getUserEmailById(String userID) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> doc =
+          await FirebaseFirestore.instance.collection('users').doc(userID).get();
+
+      if (doc.exists) {
+        return doc.data()?['email']; // Return only the email
+      }
+    } catch (e) {
+      print('Error fetching user email: $e');
+    }
+    return null; // Return null if user is not found or an error occurs
+  }
+
   Future<Map<String, dynamic>?> getDestinationById(String destinationId) async {
     return _getDocumentById('destinations', destinationId);
   }

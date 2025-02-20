@@ -17,7 +17,7 @@ class _TravelingAgencyHomeScreenState extends State<TravelingAgencyHomeScreen> {
   int index = 1;
 
   final screens = [
-    const MessagesScreen(),
+    MessagesScreen(),
     const TravelingAgencyOffers(),
     const TravelingAgencyProfile()
   ];

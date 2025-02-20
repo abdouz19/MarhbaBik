@@ -18,7 +18,7 @@ class _CarOwnerHomeScreenState extends State<CarOwnerHomeScreen> {
   int index = 1;
 
   final screens = [
-    const MessagesScreen(),
+    MessagesScreen(),
     const CarOwnerOffers(),
     const CarOwnerProfile()
   ];
