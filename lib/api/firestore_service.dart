@@ -412,14 +412,33 @@ class FirestoreService {
     }
   }
 
+  Future<DateTime?> getLastBookingTime(
+      String travelerId, String targetId) async {
+    final bookingRef = FirebaseFirestore.instance
+        .collection('bookings')
+        .where('travelerID', isEqualTo: travelerId)
+        .where('targetID', isEqualTo: targetId)
+        .orderBy('createdAt', descending: true)
+        .limit(1);
+
+    final querySnapshot = await bookingRef.get();
+    if (querySnapshot.docs.isNotEmpty) {
+      return (querySnapshot.docs.first['createdAt'] as Timestamp).toDate();
+    }
+    return null;
+  }
+
   Future<Map<String, dynamic>?> getUserDataById(String userID) async {
     return _getDocumentById('users', userID);
   }
 
   Future<String?> getUserEmailById(String userID) async {
     try {
-      DocumentSnapshot<Map<String, dynamic>> doc =
-          await FirebaseFirestore.instance.collection('users').doc(userID).get();
+      DocumentSnapshot<Map<String, dynamic>> doc = await FirebaseFirestore
+          .instance
+          .collection('users')
+          .doc(userID)
+          .get();
 
       if (doc.exists) {
         return doc.data()?['email']; // Return only the email

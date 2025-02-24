@@ -10,12 +10,36 @@ class ChatService {
 
   // get user stream
 
-  Stream<List<Map<String, dynamic>>> getUsersStream() {
-    return _firestore.collection('users').snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) {
-        final user = doc.data();
-        return user;
-      }).toList(); // Convert Iterable to List
+  Stream<List<Map<String, dynamic>>> getUsersInBookingsStream(
+      String currentUserID) {
+    return _firestore
+        .collection('bookings')
+        .where(Filter.or(
+          Filter("travelerID", isEqualTo: currentUserID),
+          Filter("targetID", isEqualTo: currentUserID),
+        ))
+        .snapshots()
+        .asyncMap((bookingSnapshot) async {
+      Set<String> userIds = {};
+
+      for (var booking in bookingSnapshot.docs) {
+        var data = booking.data();
+        userIds.add(data['travelerID']);
+        userIds.add(data['targetID']);
+      }
+
+      // Remove the current user from the list
+      userIds.remove(currentUserID);
+
+      if (userIds.isEmpty) return [];
+
+      // Fetch user details from 'users' collection
+      var usersSnapshot = await _firestore
+          .collection('users')
+          .where(FieldPath.documentId, whereIn: userIds.toList())
+          .get();
+
+      return usersSnapshot.docs.map((doc) => doc.data()).toList();
     });
   }
 
@@ -68,4 +92,41 @@ class ChatService {
         .orderBy('timestamp', descending: false)
         .snapshots();
   }
+
+  Stream<String> getLastMessageStream(String userID, String otherUserID) {
+    List<String> ids = [userID, otherUserID];
+    ids.sort();
+    String chatRoomID = ids.join("_");
+
+    return _firestore
+        .collection('chat_rooms')
+        .doc(chatRoomID)
+        .collection('messages')
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .snapshots()
+        .map((snapshot) {
+      if (snapshot.docs.isNotEmpty) {
+        return snapshot.docs.first['message'] as String;
+      }
+      return "Pour chatter, touchez ici";
+    });
+  }
+
+  Future<DateTime?> getLastMessageTime(String currentUserId, String userId) async {
+    final chatRef = FirebaseFirestore.instance
+        .collection('chats')
+        .doc(currentUserId)
+        .collection('messages')
+        .where('receiverId', isEqualTo: userId)
+        .orderBy('timestamp', descending: true)
+        .limit(1);
+
+    final querySnapshot = await chatRef.get();
+    if (querySnapshot.docs.isNotEmpty) {
+      return (querySnapshot.docs.first['timestamp'] as Timestamp).toDate();
+    }
+    return null;
+  }
+
 }

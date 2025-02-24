@@ -1,36 +1,45 @@
 import 'package:flutter/material.dart';
 
 class UserTile extends StatelessWidget {
-  final String text;
-  final VoidCallback? onTap; // Correct function type
+  final String profilePicture;
+  final String displayName;
+  final String lastMessage;
+  final VoidCallback onTap;
 
   const UserTile({
     super.key,
-    required this.text,
+    required this.profilePicture,
+    required this.displayName,
+    required this.lastMessage,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ListTile(
       onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(12), // Added padding for better UI
-        decoration: BoxDecoration(
-          color: Colors.blue,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            Icon(Icons.person, color: Colors.white), // Adjusted icon color
-            SizedBox(width: 8), // Added spacing between icon and text
-            Text(
-              text,
-              style: TextStyle(color: Colors.white, fontSize: 16), // Styled text
-            ),
-          ],
+      leading: CircleAvatar(
+        radius: 28,
+        backgroundColor: Colors.grey[300],
+        backgroundImage: profilePicture.isNotEmpty
+            ? NetworkImage(profilePicture)
+            : const AssetImage('assets/default_avatar.png') as ImageProvider,
+      ),
+      title: Text(
+        displayName,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
         ),
       ),
+      subtitle: Text(
+        lastMessage,
+        style: const TextStyle(fontSize: 14, color: Colors.grey),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+      ),
+      trailing: Icon(Icons.chat_bubble_outline, color: Colors.blue[400]),
+      contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
     );
   }
 }

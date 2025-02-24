@@ -69,7 +69,7 @@ class _MyAppState extends State<MyApp> {
       future: determineInitialRoute(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CustomLoadingScreen(); // Show loading indicator while determining initial route
+          return const CustomLoadingScreen();
         }
         final initialRoute = snapshot.data ?? '/getstarted';
         return MaterialApp(

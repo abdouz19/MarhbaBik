@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1079641719409",
+    "firebase_url": "https://marhbabik-pfe-default-rtdb.firebaseio.com",
     "project_id": "marhbabik-pfe",
     "storage_bucket": "marhbabik-pfe.appspot.com"
   },
@@ -66,11 +67,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "1079641719409-ffuflcvb9m1dfsb2aam43tt0chnmd82h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.marhbabik.marhba_bik",
+            "certificate_hash": "74032a217f7ae772484f6da4c812d78667082203"
+          }
+        },
+        {
           "client_id": "1079641719409-k8is4ro2mhc38hca14snldj832g4o7au.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.marhbabik.marhba_bik",
             "certificate_hash": "3c055fd9db0db1c580144446efa5c18fb6d887d7"
+          }
+        },
+        {
+          "client_id": "1079641719409-u7ueueahlb8t9qr29klnapvhgqm04lrt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.marhbabik.marhba_bik",
+            "certificate_hash": "c208d32b572b501c2fd50fb523c91637b8db5660"
           }
         },
         {

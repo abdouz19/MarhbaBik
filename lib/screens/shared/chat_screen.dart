@@ -6,30 +6,23 @@ import 'package:marhba_bik/components/chat_bubble.dart';
 import 'package:marhba_bik/components/message_textfield.dart';
 
 class ChatPage extends StatefulWidget {
-  final String receivedEmail;
   final String receiverID;
 
-  const ChatPage(
-      {super.key, required this.receivedEmail, required this.receiverID});
+  const ChatPage({super.key, required this.receiverID});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
-  // Text controller & Chat Service
   final TextEditingController _messageController = TextEditingController();
   final ChatService _chatService = ChatService();
-
-  // Focus & Scroll Controllers
   final FocusNode myFocusNode = FocusNode();
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-
-    // Scroll down when keyboard opens
     myFocusNode.addListener(() {
       if (myFocusNode.hasFocus) {
         Future.delayed(const Duration(milliseconds: 300), scrollDown);
@@ -45,7 +38,6 @@ class _ChatPageState extends State<ChatPage> {
     super.dispose();
   }
 
-  // Scroll to the bottom of messages
   void scrollDown() {
     Future.delayed(const Duration(milliseconds: 300), () {
       if (_scrollController.hasClients) {
@@ -70,19 +62,71 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.receivedEmail)),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(context),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 1,
+        title: _buildUserInfo(),
+      ),
       body: Column(
         children: [
-          Expanded(child: _buildMessageList()), // Display messages
-          buildUserInput(), // Message input field
+          Expanded(child: _buildMessageList()),
+          buildUserInput(),
         ],
       ),
     );
   }
 
+  Widget _buildUserInfo() {
+    return FutureBuilder<DocumentSnapshot>(
+      future: FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.receiverID)
+          .get(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.hasError) {
+          return const Text("Chat", style: TextStyle(color: Colors.black));
+        }
+
+        final userData = snapshot.data!.data() as Map<String, dynamic>;
+        final profilePicture = userData['profilePicture'] ?? '';
+        final role = userData['role'] ?? '';
+        final bool isAgency = role.toLowerCase() == "travelling agency";
+
+        final displayName = isAgency
+            ? (userData['agencyName'] ?? 'Unknown Agency')
+            : "${userData['firstName'] ?? ''} ${userData['lastName'] ?? ''}"
+                .trim();
+
+        return Row(
+          children: [
+            CircleAvatar(
+              radius: 20,
+              backgroundImage: profilePicture.isNotEmpty
+                  ? NetworkImage(profilePicture)
+                  : const AssetImage('assets/default_avatar.png')
+                      as ImageProvider,
+            ),
+            const SizedBox(width: 10), // Small space between image & text
+            Text(
+              displayName.isNotEmpty ? displayName : 'Unknown User',
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   Widget _buildMessageList() {
     User? currentUser = FirebaseAuth.instance.currentUser;
-
     return StreamBuilder(
       stream: _chatService.getMessages(widget.receiverID, currentUser!.uid),
       builder: (context, snapshot) {
@@ -90,8 +134,7 @@ class _ChatPageState extends State<ChatPage> {
         if (snapshot.connectionState == ConnectionState.waiting)
           return const Text('Loading...');
 
-        WidgetsBinding.instance.addPostFrameCallback(
-            (_) => scrollDown()); // Auto-scroll when new messages load
+        WidgetsBinding.instance.addPostFrameCallback((_) => scrollDown());
 
         return ListView(
           controller: _scrollController,
