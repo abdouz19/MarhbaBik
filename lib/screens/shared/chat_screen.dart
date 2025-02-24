@@ -131,8 +131,9 @@ class _ChatPageState extends State<ChatPage> {
       stream: _chatService.getMessages(widget.receiverID, currentUser!.uid),
       builder: (context, snapshot) {
         if (snapshot.hasError) return const Text('Error');
-        if (snapshot.connectionState == ConnectionState.waiting)
-          return const Text('Loading...');
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
         WidgetsBinding.instance.addPostFrameCallback((_) => scrollDown());
 

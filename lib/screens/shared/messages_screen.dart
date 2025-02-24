@@ -44,7 +44,7 @@ class MessagesScreen extends StatelessWidget {
 
         final users = snapshot.data ?? [];
         if (users.isEmpty) {
-          return const Center(child: Text('No users found'));
+          return _buildEmptyState();
         }
 
         return FutureBuilder<List<Map<String, dynamic>>>(
@@ -77,17 +77,24 @@ class MessagesScreen extends StatelessWidget {
 
     for (var user in users) {
       String userId = user['uid'];
-      
+
       // Fetch last message timestamp
-      DateTime? lastMessageTime = await _chatService.getLastMessageTime(currentUserId, userId);
-      
+      DateTime? lastMessageTime =
+          await _chatService.getLastMessageTime(currentUserId, userId);
+
       // Fetch latest booking timestamp
-      DateTime? lastBookingTime = await _firestoreService.getLastBookingTime(currentUserId, userId);
+      DateTime? lastBookingTime =
+          await _firestoreService.getLastBookingTime(currentUserId, userId);
 
       // Determine the most recent interaction time
-      DateTime latestInteractionTime = (lastMessageTime != null && lastBookingTime != null)
-          ? (lastMessageTime.isAfter(lastBookingTime) ? lastMessageTime : lastBookingTime)
-          : (lastMessageTime ?? lastBookingTime ?? DateTime.fromMillisecondsSinceEpoch(0));
+      DateTime latestInteractionTime =
+          (lastMessageTime != null && lastBookingTime != null)
+              ? (lastMessageTime.isAfter(lastBookingTime)
+                  ? lastMessageTime
+                  : lastBookingTime)
+              : (lastMessageTime ??
+                  lastBookingTime ??
+                  DateTime.fromMillisecondsSinceEpoch(0));
 
       // Add to list with latest interaction timestamp
       enrichedUsers.add({
@@ -97,7 +104,8 @@ class MessagesScreen extends StatelessWidget {
     }
 
     // Sort users based on latest interaction time (newest first)
-    enrichedUsers.sort((a, b) => b['latestInteractionTime'].compareTo(a['latestInteractionTime']));
+    enrichedUsers.sort((a, b) =>
+        b['latestInteractionTime'].compareTo(a['latestInteractionTime']));
 
     return enrichedUsers;
   }
@@ -106,7 +114,7 @@ class MessagesScreen extends StatelessWidget {
 Widget _buildUserListItem(Map<String, dynamic> userData, BuildContext context) {
   User? currentUser = FirebaseAuth.instance.currentUser;
   if (currentUser == null) return const SizedBox();
-  
+
   final FirestoreService _firestoreService = FirestoreService();
   final ChatService _chatService = ChatService();
 
@@ -122,17 +130,21 @@ Widget _buildUserListItem(Map<String, dynamic> userData, BuildContext context) {
       }
 
       final userDetails = snapshot.data!;
-      final profilePicture = userDetails['profilePicture'] ?? ''; // Profile pic URL
-      final role = userDetails['role'] ?? ''; // Role: "travelling agency" or user
+      final profilePicture =
+          userDetails['profilePicture'] ?? ''; // Profile pic URL
+      final role =
+          userDetails['role'] ?? ''; // Role: "travelling agency" or user
       final bool isAgency = role.toLowerCase() == "travelling agency";
 
       // Display agencyName if it's an agency, otherwise show first & last name
       final displayName = isAgency
           ? (userDetails['agencyName'] ?? 'Unknown Agency')
-          : "${userDetails['firstName'] ?? ''} ${userDetails['lastName'] ?? ''}".trim();
+          : "${userDetails['firstName'] ?? ''} ${userDetails['lastName'] ?? ''}"
+              .trim();
 
       return StreamBuilder<String>(
-        stream: _chatService.getLastMessageStream(currentUser.uid, userData['uid']),
+        stream:
+            _chatService.getLastMessageStream(currentUser.uid, userData['uid']),
         builder: (context, messageSnapshot) {
           String lastMessage = "Pour chatter, touchez ici";
           if (messageSnapshot.hasData) {
@@ -160,27 +172,31 @@ Widget _buildUserListItem(Map<String, dynamic> userData, BuildContext context) {
   );
 }
 
-
-
-
-
-
-/* SizedBox(
-                child: Image.asset('assets/images/message_illustration.png'),
-              ),
-              const SizedBox(height: 10),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Text(
-                  'Fonctionnalité de messagerie en cours de développement',
-                  textAlign: TextAlign.center,
-                  maxLines: 3,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Color(0xff001939),
-                    fontWeight: FontWeight.w700,
-                    fontFamily: 'KastelovAxiforma',
-                    fontSize: 20,
-                  ),
-                ),
-              ),*/
+Widget _buildEmptyState() {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      SizedBox(
+        height: 200,
+        child: Image.asset('assets/images/message_illustration.png'),
+      ),
+      const SizedBox(height: 10),
+      const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Text(
+          "Aucune conversation pour l’instant… Brisez la glace ! ❄️💬",
+          textAlign: TextAlign.center,
+          maxLines: 3,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            color: Color(0xff001939),
+            fontWeight: FontWeight.w700,
+            fontFamily: 'KastelovAxiforma',
+            fontSize: 20,
+          ),
+        ),
+      ),
+    ],
+  );
+}
