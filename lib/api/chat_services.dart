@@ -113,7 +113,8 @@ class ChatService {
     });
   }
 
-  Future<DateTime?> getLastMessageTime(String currentUserId, String userId) async {
+  Future<DateTime?> getLastMessageTime(
+      String currentUserId, String userId) async {
     final chatRef = FirebaseFirestore.instance
         .collection('chats')
         .doc(currentUserId)
@@ -129,4 +130,18 @@ class ChatService {
     return null;
   }
 
+  Future<bool> hasMessagesWith(String currentUserID, String otherUserID) async {
+    List<String> ids = [currentUserID, otherUserID];
+    ids.sort();
+    String chatRoomID = ids.join("_");
+
+    final querySnapshot = await _firestore
+        .collection('chat_rooms')
+        .doc(chatRoomID)
+        .collection('messages')
+        .limit(1) // Only check if at least one message exists
+        .get();
+
+    return querySnapshot.docs.isNotEmpty;
+  }
 }

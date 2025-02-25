@@ -14,14 +14,125 @@ class MessagesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          const SizedBox(height: 16),
-          Expanded(
-            child: _buildUserList(),
-          ),
-        ],
+        body: Stack(children: [
+      Container(
+        color: const Color(0xff3F75BB),
       ),
+      Positioned.fill(
+          top: 150,
+          child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30),
+                  topRight: Radius.circular(30),
+                ),
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 16),
+                    _buildNewUsersList(),
+                    const SizedBox(height: 16),
+                    Expanded(child: _buildUserList()),
+                  ],
+                ),
+              )))
+    ]));
+  }
+
+  Widget _buildNewUsersList() {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      return const SizedBox();
+    }
+
+    return StreamBuilder<List<Map<String, dynamic>>>(
+      stream: _chatService.getUsersInBookingsStream(currentUser.uid),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const SizedBox();
+
+        final users = snapshot.data ?? [];
+        List<Map<String, dynamic>> newUsers = [];
+
+        return FutureBuilder<List<Map<String, dynamic>>>(
+          future: _filterNewUsers(false, users, currentUser.uid),
+          builder: (context, futureSnapshot) {
+            if (!futureSnapshot.hasData || futureSnapshot.data!.isEmpty) {
+              return const SizedBox();
+            }
+
+            newUsers = futureSnapshot.data!;
+            return SizedBox(
+              height: 80,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: newUsers.length,
+                itemBuilder: (context, index) {
+                  final user = newUsers[index];
+                  return _buildUserAvatar(user, context);
+                },
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<List<Map<String, dynamic>>> _filterNewUsers(bool vertical,
+      List<Map<String, dynamic>> users, String currentUserId) async {
+    List<Map<String, dynamic>> newUsers = [];
+    List<Map<String, dynamic>> oldUsers = [];
+
+    for (var user in users) {
+      String userId = user['uid'];
+      bool hasMessages =
+          await _chatService.hasMessagesWith(currentUserId, userId);
+      if (!hasMessages) {
+        newUsers.add(user);
+      } else {
+        oldUsers.add(user);
+      }
+    }
+    if (vertical) {
+      return oldUsers;
+    } else {
+      return newUsers;
+    }
+  }
+
+  Widget _buildUserAvatar(Map<String, dynamic> userData, BuildContext context) {
+    return FutureBuilder<Map<String, dynamic>?>(
+      future: _firestoreService.getUserDataById(userData['uid']),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return const SizedBox();
+
+        final user = snapshot.data!;
+        final profilePicture = user['profilePicture'] ?? '';
+
+        return GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChatPage(receiverID: user['uid']),
+              ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: CircleAvatar(
+              radius: 30,
+              backgroundImage: profilePicture.isNotEmpty
+                  ? NetworkImage(profilePicture)
+                  : null,
+              backgroundColor: Colors.grey.shade300,
+            ),
+          ),
+        );
+      },
     );
   }
 
@@ -48,7 +159,7 @@ class MessagesScreen extends StatelessWidget {
         }
 
         return FutureBuilder<List<Map<String, dynamic>>>(
-          future: _getSortedUserList(users, currentUser.uid),
+          future: _filterNewUsers(true, users, currentUser.uid),
           builder: (context, sortedSnapshot) {
             if (sortedSnapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());

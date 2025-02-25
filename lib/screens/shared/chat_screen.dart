@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:marhba_bik/api/chat_services.dart';
 import 'package:marhba_bik/components/chat_bubble.dart';
 import 'package:marhba_bik/components/message_textfield.dart';
@@ -113,10 +114,10 @@ class _ChatPageState extends State<ChatPage> {
             const SizedBox(width: 10), // Small space between image & text
             Text(
               displayName.isNotEmpty ? displayName : 'Unknown User',
-              style: const TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
+              style: GoogleFonts.poppins(
+                color: const Color(0xff001939),
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
